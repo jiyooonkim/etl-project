@@ -6,7 +6,7 @@ import org.apache.spark.sql.*;
 import static org.apache.spark.sql.functions.*;
 
 public class Main {
-    static String input_file_path = "./2019-Dec.csv";  // csv file path   ex) ./2019-Dec.csv
+    static String input_file_path = "./2019-Nov.csv";  // csv file path   ex) ./2019-Dec.csv
     static String hive_wearhouse_path = "hdfs://localhost:9000/user/hive/warehouse/";   // hivewearhouse path
     static String hdfs_path = "hdfs://localhost:9000/user/";
     static String hive_url = "jdbc:hive2://localhost:10000/default";
