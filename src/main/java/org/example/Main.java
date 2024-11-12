@@ -2,20 +2,16 @@ package org.example;
 
 import io.delta.tables.DeltaTable;
 import org.apache.spark.sql.*;
-import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.logging.Logger;
 
 import static org.apache.spark.sql.functions.*;
 
 public class Main {
-    static String input_file_path = "/Users/jy_kim/Downloads/2019-Dec.csv";
-    static String hive_wearhouse_path = "hdfs://localhost:9000/user/hive/warehouse/";
+    static String input_file_path = "./2019-Dec.csv";  // csv file path   ex) ./2019-Dec.csv
+    static String hive_wearhouse_path = "hdfs://localhost:9000/user/hive/warehouse/";   // hivewearhouse path
     static String hdfs_path = "hdfs://localhost:9000/user/";
     static String hive_url = "jdbc:hive2://localhost:10000/default";
-    static String create_file_path = "/Users/jy_kim/Downloads/etl-project/sql/create/create_daily_log.sql";
-    static String delta_path = "hdfs://localhost:9000/user/delta_log/";
+    static String create_file_path = "/Users/jy_kim/Downloads/etl-project/sql/create/create_daily_log.sql";     // create hive table query path
+    static String delta_path = "hdfs://localhost:9000/user/delta_log/";     // delta path
 
     public static void main(String[] args) {
         SparkSession.Builder builder = SparkSession.builder();
@@ -91,11 +87,8 @@ public class Main {
                     .parquet(hive_wearhouse_path + "user_log");
             }
 
-
              /* 3. delta backup - update & insert */
             try {
-
-
 //             DeltaTable deltaTable1 = DeltaTable.forPath(sparkSession, delta_path);
 //            deltaTable1.toDF().show(30, false);
 //                deltaTable1.as("old_dt")
@@ -107,11 +100,11 @@ public class Main {
 
             DeltaTable deltaTable = DeltaTable.forPath(sparkSession, delta_path);
             deltaTable.as("old_dt")
-                    .merge(
-                        dataset.as("new_dt"),
-                        "new_dt.event_time = old_dt.event_time and new_dt.user_id = old_dt.user_id and old_dt.event_type = new_dt.event_type"
-                    )
-                    .whenNotMatched().insertAll().execute();
+                .merge(
+                    dataset.as("new_dt"),
+                    "new_dt.event_time = old_dt.event_time and new_dt.user_id = old_dt.user_id and old_dt.event_type = new_dt.event_type"
+                )
+                .whenNotMatched().insertAll().execute();
             } catch (Exception e){
                 dataset.write().mode("overwrite")
                     .format("delta")
@@ -126,6 +119,5 @@ public class Main {
                     .option("compression", "snappy")
                     .parquet(hive_wearhouse_path + "user_log");
         }
-
     }
 }

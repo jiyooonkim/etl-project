@@ -1,5 +1,10 @@
 ### 아래 사용자 activity 로그를 Hive table 로 제공하기 위한 Spark Application 을 작성하세요
-#### version : java ,spark, hadoop, hive, [delta](https://docs.delta.io/latest/releases.html)
+#### version
+ + java 8
+ + spark 3.0.0
+ + hadoop 3.4.0
+ + hive 3.1.3
+ + [delta](https://docs.delta.io/latest/releases.html)
 
 
 
